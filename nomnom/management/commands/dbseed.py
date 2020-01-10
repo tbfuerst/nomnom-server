@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from nomnom.models import Tag_Category
+from nomnom.models import Tag_Category, Tag
 
 from random_words import RandomWords
 from datetime import date
@@ -52,6 +52,18 @@ class Command(BaseCommand):
                 tagC = Tag_Category(name=rword(1,""))
                 tagC.save()
             
+        def tags():
+            Tag.objects.all().delete()
+            tagCs = Tag_Category.objects.all()
+
+            def get_random_tag_cat():
+                tagCat = tagCs[int((random()*9).__round__(0))]
+                return tagCat
+
+            for i in range (100):
+                tagC = get_random_tag_cat()
+                tag = Tag(name=rword(1,""), category=tagC)
+                tag.save()
 
 
         # def account_template():
@@ -156,4 +168,9 @@ class Command(BaseCommand):
         #     assign_rnd_tags()
         #     print("transaction tags assigned")
 
+        print("Seeding Tag Categories")
         tag_categories()
+        print("Seeding Tags")
+        tags()
+
+        print("Seeding successful")

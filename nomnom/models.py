@@ -22,6 +22,7 @@ class Tag(models.Model):
 
 
 
+
 # class Account_Template(models.Model):
 #     id = models.AutoField(primary_key=True)
 #     template_identifier = models.CharField(max_length=64)

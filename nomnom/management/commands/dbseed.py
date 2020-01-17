@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from nomnom.models import Tag_Category, Tag
+from nomnom.models import Tag_Category, Tag, Ingredient, Recipe, IngredientSet, Recipe_Book
+from django.contrib.auth.models import User
 
 from random_words import RandomWords
 from datetime import date
@@ -37,6 +38,10 @@ class Command(BaseCommand):
             rnd_date.replace(year=year)
             return rnd_date
 
+        def get_rnd_recipe():
+            recipes = Recipe.objects.all()
+            return recipes[randint(0, 199)]
+
         def rints(count, separator):
             numbers = []
             for i in range(count):
@@ -45,7 +50,15 @@ class Command(BaseCommand):
                 numbers.append(strrng)
             concat_numbers = separator.join(numbers)
             return concat_numbers
+        
+        def rnumber(lower, upper):
+            return randint(lower,upper) 
 
+        def get_rnd_user():
+            users = User.objects.all()
+            user = users[rnumber(1,2)]
+            return user
+            
         def tag_categories():
             Tag_Category.objects.all().delete()
             for i in range(10):
@@ -64,113 +77,82 @@ class Command(BaseCommand):
                 tagC = get_random_tag_cat()
                 tag = Tag(name=rword(1,""), category=tagC)
                 tag.save()
+        
+        def ingredients():
+            Ingredient.objects.all().delete()
 
+            for i in range(400):
+                ingred = Ingredient(name=rword(1,""))
+                ingred.save()
+        
+        def recipes():
+            Recipe.objects.all().delete()
+            tags = Tag.objects.all()
 
-        # def account_template():
-        #     Account_Template.objects.all().delete()
+            def get_rnd_tags():
+                tag = tags[int((random()*24).__round__(0))]
+                return tag
 
-        #     att = Account_Type_Template.objects.all()
-        #     att0 = att[0]
-        #     ids = att[0].account_type_ids
-        #     arrids = ids.split(';')
+            for i in range(200):
 
-        #     ratt = []
-        #     for i in range(30):
-        #         randomid = arrids[int((random()*5).__round__(0))]
-        #         ratt.append(randomid)
+                recipe = Recipe(creator=get_rnd_user(), name=rword(3," "), amount_persons = randint(1,12),cook_time_minutes=randint(10,180), instructions=rword(140," "),is_deleted=False)
+                recipe.save()
 
-        #     strratt = ';'.join(ratt)
+            print("assigning recipe tags...")
+            all_recipes = Recipe.objects.all()
+            def assign_rnd_tags():
+                for i in range(200):
+                    recipe = all_recipes[i]
+                    rnd_tag_amount = randint(1,4)
+                    for j in range(rnd_tag_amount):
+                        tag = get_rnd_tags()
+                        recipe.tags.add(tag)
+                    recipe.save()
+            assign_rnd_tags()
+            print("transaction tags assigned")
 
-        #     acc = Account_Template(template_identifier=rword(2, ''), account_numbers=rints(
-        #         30, ';'), type_template=att0, account_names=rword(30, ';'), account_descriptions=rword(30, ';'), type_ids=strratt)
-        #     acc.save()
+        def ingredientsets():
+            IngredientSet.objects.all().delete()
 
-        # def account_type():
-        #     Account_Type.objects.all().delete()
-        #     for i in range(6):
-        #         acc = Account_Type(type_id=rint(), name=rword(
-        #             1, ''), description=rword(2, ' '))
-        #         acc.save()
+            def get_rand_ingred():
+                ingredients = Ingredient.objects.all()
+                return ingredients[randint(0,399)]
 
-        # def account():
-        #     Account.objects.all().delete()
-        #     accountTypes = Account_Type.objects.all()
+            ingredientset = IngredientSet(recipe=get_rnd_recipe(), name=get_rand_ingred(), amount=randint(1,4000), unit=rword(1,""))
+            ingredientset.save()
 
-        #     def get_random_account():
-        #         racc = accountTypes[int((random()*5).__round__(0))]
-        #         return racc
+        def recipeBooks():
+            Recipe_Book.objects.all().delete()
+            users = User.objects.all()
 
-        #     for i in range(45):
-        #         racc = get_random_account()
-        #         acc = Account(number=rint(), name=rword(2, ';'), description=rword(
-        #             4, ' '), type_id=racc, is_deleted=False)
-        #         acc.save()
-
-        # def area():
-        #     Area.objects.all().delete()
-        #     for i in range(4):
-        #         area = Area(name=rword(1,
-        #                                ''), description=rword(5, ' '))
-        #         area.save()
-
-        # def transaction_tag():
-        #     Transaction_Tag.objects.all().delete()
-        #     for i in range(25):
-        #         tag = Transaction_Tag(name=rword(1, ''))
-        #         tag.save()
-
-        # def transaction():
-
-        #     Transaction.objects.all().delete()
-        #     areas = Area.objects.all()
-        #     accounts = Account.objects.all()
-        #     tags = Transaction_Tag.objects.all()
-
-        #     def get_rnd_account():
-        #         racc = accounts[int((random()*5).__round__(0))]
-        #         return racc
-
-        #     def get_rnd_area():
-        #         area = areas[int((random()*3).__round__(0))]
-        #         return area
-
-        #     def get_rnd_tags():
-        #         tag = tags[int((random()*24).__round__(0))]
-        #         return tag
-
-        #     print("seeding transactions....")
-        #     for i in range(transactions_count):
-        #         created_at = get_rnd_date(2019)
-        #         updated_at = get_rnd_date(2020)
-        #         book_date = get_rnd_date(2020)
-        #         stack_id = rint()
-        #         area = get_rnd_area()
-        #         account_id = get_rnd_account()
-        #         c_account_id = get_rnd_account()
-        #         description = rword(7, ' ')
-        #         amount = rfloat()
-        #         # TODO Add many to many tags as test
-        #         transaction = Transaction(created_at=created_at, updated_at=updated_at, book_date=book_date, stack_id=stack_id,
-        #                                   area=area, account_id=account_id, c_account_id=c_account_id, description=description, amount=amount)
-        #         transaction.save()
-
-        #     print("assigning transaction tags...")
-        #     all_transac = Transaction.objects.all()
-
-        #     def assign_rnd_tags():
-        #         for i in range(transactions_count):
-        #             transac = all_transac[i]
-        #             rnd_tag_amount = int((random()*2).__round__(0))
-        #             for j in range(rnd_tag_amount):
-        #                 tag = get_rnd_tags()
-        #                 transac.tags.add(tag)
-        #             transac.save()
-        #     assign_rnd_tags()
-        #     print("transaction tags assigned")
+            for i in range(1,3):
+                rb = Recipe_Book(user=users[i])
+                rb.save()
+            
+            print("assigning recipes to recipeBook...")
+            all_recipe_books = Recipe_Book.objects.all()
+            print(all_recipe_books)
+            def assign_rnd_recipes():
+                for i in range(2):
+                    rb = all_recipe_books[i]
+                    rnd_tag_amount = randint(1,35)
+                    for j in range(rnd_tag_amount):
+                        recipe = get_rnd_recipe()
+                        rb.recipe.add(recipe)
+                    recipe.save()
+            assign_rnd_recipes()
+            print("recipes assigned")
 
         print("Seeding Tag Categories")
         tag_categories()
         print("Seeding Tags")
         tags()
-
+        print("Seeding Ingredients")
+        ingredients()
+        print("Seeding Recipes")
+        recipes()
+        print("Seeding IngredientSets")
+        ingredientsets()
+        print("Seeding Recipe Books")
+        recipeBooks()
         print("Seeding successful")

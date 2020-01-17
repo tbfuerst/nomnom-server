@@ -32,7 +32,7 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     id = models.AutoField(primary_key=True)
     creator = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=64)
     image = models.FileField(upload_to='recipe-images/')
     thumbnail = models.FileField(upload_to='recipe-thumbs/')
     amount_persons = models.PositiveSmallIntegerField()

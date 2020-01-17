@@ -15,13 +15,11 @@ from django.http import JsonResponse
 def index(request):
     return HttpResponse("Hello, world. You're at the index.")
 
-
 def get_all_tag_categories(request):
     if request.method == 'GET':
         tagC = Tag_Category.objects.all()
         serializer = Tag_Category_Serializer(tagC, many=True)
         return JsonResponse(serializer.data, safe=False)
-
 
 def get_all_tags(request):
     if request.method == 'GET':
@@ -29,13 +27,17 @@ def get_all_tags(request):
         serializer = Tag_Serializer(tags, many=True)
         return JsonResponse(serializer.data, safe=False)
 
-
 def get_all_ingredients(request):
     if request.method == 'GET':
         ingredients = Ingredient.objects.all()
         serializer = Ingredient_Serializer(ingredients, many=True)
         return JsonResponse(serializer.data, safe=False)
 
+def search_by_ingredient(request):
+    if request.method == 'POST':
+        return JsonResponse(["this is a post request"], safe=False)
+    if request.method == 'GET':
+        return JsonResponse([1, 2, 3], safe=False)
 
 class Tag_Category_List(APIView):
     def get(self, request, format=None):

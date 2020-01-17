@@ -5,4 +5,6 @@ from . import api
 
 urlpatterns = [
     path('get-all-tag-categories', api.get_all_tag_categories),
+    path('get-all-tags', api.get_all_tags),
+    path('get-all-ingredients', api.get_all_ingredients),
 ]

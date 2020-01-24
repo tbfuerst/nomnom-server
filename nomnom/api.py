@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .models import Tag_Category, Tag, Ingredient
 from .serializers import Tag_Category_Serializer, Ingredient_Serializer, Tag_Serializer
+import json
 
 
 # Create your views here.
@@ -12,6 +13,26 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 
 
+class IngredientsList(APIView):
+    """
+    List all ingredients or search by ingredients
+    """
+
+    def get(self, request, format=None):
+        ingredients = Ingredient.objects.all()
+        serializer = Ingredient_Serializer(ingredients, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+class IngredientsSearch(APIView):
+    def post(self, request, format=None):
+        try:
+            print(request.data)
+            response = json.dumps({'sent data:': request.data})
+            return HttpResponse(response, status=status.HTTP_201_CREATED)
+        except Exception as error:
+            return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+        
+        
 def index(request):
     return HttpResponse("Hello, world. You're at the index.")
 
@@ -25,12 +46,6 @@ def get_all_tags(request):
     if request.method == 'GET':
         tags = Tag.objects.all()
         serializer = Tag_Serializer(tags, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-def get_all_ingredients(request):
-    if request.method == 'GET':
-        ingredients = Ingredient.objects.all()
-        serializer = Ingredient_Serializer(ingredients, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 def search_by_ingredient(request):

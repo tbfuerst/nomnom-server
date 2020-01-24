@@ -1,2 +1,3 @@
-# accant_server
-A Django Server to serve Accant as a Backend
+# nomnom-server
+A Django Server to serve NomNom as a Backend, communicating via REST API (DRF)
+

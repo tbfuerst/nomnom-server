@@ -8,4 +8,5 @@ urlpatterns = [
     path('get-all-tags', api.get_all_tags),
     path('get-all-ingredients', api.IngredientsList.as_view()),
     path('search-by-ingredient', api.IngredientsSearch.as_view()),
+    path('search-by-tag', api.TagSearch.as_view()),
 ]

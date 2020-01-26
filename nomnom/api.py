@@ -6,7 +6,7 @@ from rest_framework import status
 from .models import Tag_Category, Tag, Ingredient
 from .serializers import Tag_Category_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer
 import json
-from .api_lib.searchers import IngredientSearcher
+from .api_lib.searchers import IngredientSearcher, TagSearcher
  
 
 # Create your views here.
@@ -36,6 +36,16 @@ class IngredientsSearch(APIView):
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except Exception as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
+class TagSearch(APIView):
+    def post(self, request, format=None):
+        try:
+            searcher = TagSearcher(request.data)
+            recipes = searcher.search()
+            return HttpResponse(recipes, status=status.HTTP_200_OK)
+        except Exception as error:
+            return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+        
         
         
 def index(request):
@@ -53,11 +63,6 @@ def get_all_tags(request):
         serializer = Tag_Serializer(tags, many=True)
         return JsonResponse(serializer.data, safe=False)
 
-def search_by_ingredient(request):
-    if request.method == 'POST':
-        return JsonResponse(["this is a post request"], safe=False)
-    if request.method == 'GET':
-        return JsonResponse([1, 2, 3], safe=False)
 
 class Tag_Category_List(APIView):
     def get(self, request, format=None):

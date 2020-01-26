@@ -1,6 +1,12 @@
 from ..models import Ingredient, IngredientSet, Recipe
 from collections import Counter 
 
+class TagSearcher:
+    def __init__(self, search_content: list):
+        self.searched_tags = search_content
+    
+    def search(self):
+        return "searching tags...."
 
 class IngredientSearcher:
     def __init__(self, search_content: list, search_type: str):

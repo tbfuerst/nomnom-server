@@ -1,5 +1,4 @@
-from django.urls import include, path
-from rest_framework import routers
+from django.urls import path
 from . import api
 
 
@@ -9,4 +8,5 @@ urlpatterns = [
     path('get-all-ingredients', api.IngredientsList.as_view()),
     path('search-by-ingredient', api.IngredientsSearch.as_view()),
     path('search-by-tag', api.TagSearch.as_view()),
+    path('get-full-tag-info', api.Tag_Tag_Category_List.as_view()),
 ]

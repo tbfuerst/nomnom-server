@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 from random_words import RandomWords
 from datetime import date
-from random import *
 import random as rnd
 
 # dirty seeder
@@ -29,10 +28,10 @@ class Command(BaseCommand):
             return words
 
         def rfloat():
-            return (random()*1000).__round__(2)
+            return (rnd.random()*1000).__round__(2)
 
         def rint():
-            return int((random()*2000).__round__(0))
+            return int((rnd.random()*2000).__round__(0))
 
         def get_rnd_date(year):
             start_dt = date.today().replace(day=1, month=1).toordinal()
@@ -46,19 +45,19 @@ class Command(BaseCommand):
 
         def get_rnd_recipe():
             recipes = Recipe.objects.all()
-            return recipes[randint(0, amount_recipes-1)]
+            return recipes[rnd.randint(0, amount_recipes-1)]
 
         def rints(count, separator):
             numbers = []
-            for i in range(count):
-                rng = int(random()*32000)
+            for _ in range(count):
+                rng = int(rnd.random()*32000)
                 strrng = str(rng)
                 numbers.append(strrng)
             concat_numbers = separator.join(numbers)
             return concat_numbers
         
         def rnumber(lower, upper):
-            return randint(lower,upper) 
+            return rnd.randint(lower,upper) 
 
         def get_rnd_user():
             users = User.objects.all()
@@ -67,7 +66,7 @@ class Command(BaseCommand):
             
         def tag_categories():
             Tag_Category.objects.all().delete()
-            for i in range(amount_tag_categories):
+            for _ in range(amount_tag_categories):
                 tagC = Tag_Category(name=rword(1,""))
                 tagC.save()
             
@@ -76,10 +75,10 @@ class Command(BaseCommand):
             tagCs = Tag_Category.objects.all()
 
             def get_random_tag_cat():
-                tagCat = tagCs[int((random()*(amount_tag_categories-1)).__round__(0))]
+                tagCat = tagCs[int((rnd.random()*(amount_tag_categories-1)).__round__(0))]
                 return tagCat
 
-            for i in range(amount_tags):
+            for _ in range(amount_tags):
                 tagC = get_random_tag_cat()
                 tag = Tag(name=rword(1,""), category=tagC)
                 tag.save()
@@ -87,7 +86,7 @@ class Command(BaseCommand):
         def ingredients():
             Ingredient.objects.all().delete()
 
-            for i in range(amount_ingredients):
+            for _ in range(amount_ingredients):
                 ingred = Ingredient(name=rword(1,""))
                 ingred.save()
         
@@ -96,10 +95,10 @@ class Command(BaseCommand):
             tags = Tag.objects.all()
 
             def get_rnd_tags():
-                tag = tags[int((random()*(amount_tags-1)).__round__(0))]
+                tag = tags[int((rnd.random()*(amount_tags-1)).__round__(0))]
                 return tag
 
-            for i in range(amount_recipes):
+            for _ in range(amount_recipes):
 
                 recipe = Recipe(creator=get_rnd_user(), name=rword(3," "), amount_persons = randint(1,12),cook_time_minutes=randint(10,180), instructions=rword(140," "),is_deleted=False)
                 recipe.save()
@@ -110,7 +109,7 @@ class Command(BaseCommand):
                 for i in range(amount_recipes):
                     recipe = all_recipes[i]
                     rnd_tag_amount = randint(1,4)
-                    for j in range(rnd_tag_amount):
+                    for _ in range(rnd_tag_amount):
                         tag = get_rnd_tags()
                         recipe.tags.add(tag)
                     recipe.save()
@@ -124,7 +123,7 @@ class Command(BaseCommand):
                 ingredients = Ingredient.objects.all()
                 return ingredients[randint(0, (amount_ingredients-1))]
                 
-            for i in range(amount_ingred_sets):
+            for _ in range(amount_ingred_sets):
                 ingredientset = IngredientSet(recipe=get_rnd_recipe(), ingredient=get_rand_ingred(), amount=randint(1,4000), unit=rword(1,""))
                 ingredientset.save()
 

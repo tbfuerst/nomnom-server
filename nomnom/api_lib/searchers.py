@@ -1,12 +1,51 @@
-from ..models import Ingredient, IngredientSet, Recipe
-from collections import Counter 
+""" This class handles all searching operations """
+
+from nomnom.models import IngredientSet, Recipe
+from collections import Counter
+from nomnom.serializers import Recipe_Serializer
 
 class TagSearcher:
     def __init__(self, search_content: list):
         self.searched_tags = search_content
     
     def search(self):
-        return "searching tags...."
+        taglist_length = len(self.searched_tags)
+        found_tags = []
+        
+        for tag in self.searched_tags:
+            #print(tag)
+            uniqueId = int(tag['uniqueId'])
+            #print(uniqueId)
+            found_tags.append(uniqueId)
+        
+        all_found_recipes_or = []
+        for tagsId in found_tags:
+            all_found_recipes_or += Recipe.objects.filter(tags__id=tagsId)
+
+        counted_recipes_or = Counter(all_found_recipes_or)
+        reduced_found_recipes_or = []
+        for unique_recipe_or in counted_recipes_or:
+            reduced_found_recipes_or.append(unique_recipe_or)
+
+
+        all_found_recipes_and = []
+        for tagsId in found_tags:
+            all_found_recipes_and += Recipe.objects.filter(tags__id=tagsId)
+        
+        c = Counter(all_found_recipes_and)
+        reduced_found_recipes_and = []
+        taglist_length_equals = Counter(recipe for recipe in c.elements() if c[recipe] == taglist_length)
+        for found_recipe in taglist_length_equals:
+            reduced_found_recipes_and.append(found_recipe)
+
+        and_serializer = Recipe_Serializer(reduced_found_recipes_and, many=True)
+        or_serializer = Recipe_Serializer(reduced_found_recipes_or, many=True)
+
+        
+        response = {'all_tags': and_serializer.data,
+                    'one_or_more_tags': or_serializer.data}
+
+        return(response)
 
 class IngredientSearcher:
     def __init__(self, search_content: list, search_type: str):

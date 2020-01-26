@@ -48,9 +48,9 @@ class Recipe(models.Model):
 class IngredientSet(models.Model):
     id = models.AutoField(primary_key=True)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    name = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     amount = models.PositiveSmallIntegerField()
-    unit = models.CharField(max_length=16)
+    unit = models.CharField(max_length=32)
 
     def ___str___(self):
         return self.name

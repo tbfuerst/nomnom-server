@@ -14,7 +14,13 @@ import random as rnd
 class Command(BaseCommand):
     help = 'Creates mock data and fills database with it.'
 
+
     def handle(self, *args, **options):
+        amount_tag_categories = 5
+        amount_tags = 30
+        amount_ingredients = 10
+        amount_recipes = 10
+        amount_ingred_sets = 100
 
         def rword(count, separator):
             rand = RandomWords()
@@ -40,7 +46,7 @@ class Command(BaseCommand):
 
         def get_rnd_recipe():
             recipes = Recipe.objects.all()
-            return recipes[randint(0, 199)]
+            return recipes[randint(0, amount_recipes-1)]
 
         def rints(count, separator):
             numbers = []
@@ -61,7 +67,7 @@ class Command(BaseCommand):
             
         def tag_categories():
             Tag_Category.objects.all().delete()
-            for i in range(10):
+            for i in range(amount_tag_categories):
                 tagC = Tag_Category(name=rword(1,""))
                 tagC.save()
             
@@ -70,10 +76,10 @@ class Command(BaseCommand):
             tagCs = Tag_Category.objects.all()
 
             def get_random_tag_cat():
-                tagCat = tagCs[int((random()*9).__round__(0))]
+                tagCat = tagCs[int((random()*(amount_tag_categories-1)).__round__(0))]
                 return tagCat
 
-            for i in range (100):
+            for i in range(amount_tags):
                 tagC = get_random_tag_cat()
                 tag = Tag(name=rword(1,""), category=tagC)
                 tag.save()
@@ -81,7 +87,7 @@ class Command(BaseCommand):
         def ingredients():
             Ingredient.objects.all().delete()
 
-            for i in range(400):
+            for i in range(amount_ingredients):
                 ingred = Ingredient(name=rword(1,""))
                 ingred.save()
         
@@ -90,10 +96,10 @@ class Command(BaseCommand):
             tags = Tag.objects.all()
 
             def get_rnd_tags():
-                tag = tags[int((random()*24).__round__(0))]
+                tag = tags[int((random()*(amount_tags-1)).__round__(0))]
                 return tag
 
-            for i in range(200):
+            for i in range(amount_recipes):
 
                 recipe = Recipe(creator=get_rnd_user(), name=rword(3," "), amount_persons = randint(1,12),cook_time_minutes=randint(10,180), instructions=rword(140," "),is_deleted=False)
                 recipe.save()
@@ -101,7 +107,7 @@ class Command(BaseCommand):
             print("assigning recipe tags...")
             all_recipes = Recipe.objects.all()
             def assign_rnd_tags():
-                for i in range(200):
+                for i in range(amount_recipes):
                     recipe = all_recipes[i]
                     rnd_tag_amount = randint(1,4)
                     for j in range(rnd_tag_amount):
@@ -109,17 +115,18 @@ class Command(BaseCommand):
                         recipe.tags.add(tag)
                     recipe.save()
             assign_rnd_tags()
-            print("transaction tags assigned")
+            print("tags assigned!")
 
         def ingredientsets():
             IngredientSet.objects.all().delete()
 
             def get_rand_ingred():
                 ingredients = Ingredient.objects.all()
-                return ingredients[randint(0,399)]
-
-            ingredientset = IngredientSet(recipe=get_rnd_recipe(), name=get_rand_ingred(), amount=randint(1,4000), unit=rword(1,""))
-            ingredientset.save()
+                return ingredients[randint(0, (amount_ingredients-1))]
+                
+            for i in range(amount_ingred_sets):
+                ingredientset = IngredientSet(recipe=get_rnd_recipe(), ingredient=get_rand_ingred(), amount=randint(1,4000), unit=rword(1,""))
+                ingredientset.save()
 
         def recipeBooks():
             Recipe_Book.objects.all().delete()
@@ -131,12 +138,11 @@ class Command(BaseCommand):
             
             print("assigning recipes to recipeBook...")
             all_recipe_books = Recipe_Book.objects.all()
-            print(all_recipe_books)
             def assign_rnd_recipes():
                 for i in range(2):
                     rb = all_recipe_books[i]
-                    rnd_tag_amount = randint(1,35)
-                    for j in range(rnd_tag_amount):
+                    rnd_recipe_amount = randint(1, int((amount_recipes-1)/2))
+                    for j in range(rnd_recipe_amount):
                         recipe = get_rnd_recipe()
                         rb.recipe.add(recipe)
                     recipe.save()

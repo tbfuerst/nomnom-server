@@ -16,13 +16,11 @@ class Tag_Serializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'category']
 
 
-class UserSerializer(serializers.ModelSerializer):
-    recipes = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Recipe.objects.all())
-
+class Recipe_Serializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['id', 'username', 'recipes']
+        model = Recipe
+        fields = ['id', 'creator', 'name', 'amount_persons',
+                  'cook_time_minutes', 'instructions', 'tags']
 
 
 class Ingredient_Serializer(serializers.ModelSerializer):

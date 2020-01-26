@@ -6,7 +6,7 @@ from rest_framework import status
 from .models import Tag_Category, Tag, Ingredient
 from .serializers import Tag_Category_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer
 import json
-from .lib.searchers import IngredientSearcher
+from .api_lib.searchers import IngredientSearcher
  
 
 # Create your views here.
@@ -26,16 +26,14 @@ class IngredientsList(APIView):
 
 class IngredientsSearch(APIView):
     def post(self, request, format=None):
-        searcher = IngredientSearcher(request.data[1:], request.data[0])
-        if (request.data[0] == "AND"):
-            recipes = searcher.and_search()
-        else:
-            recipes = searcher.or_search()
-        serializer = Recipe_Serializer(recipes, many=True)
-        return JsonResponse(serializer.data, safe=False)
         try:
-            response = json.dumps({'sent data:': request.data})
-            return HttpResponse(response, status=status.HTTP_200_OK)
+            searcher = IngredientSearcher(request.data[1:], request.data[0])
+            if (request.data[0] == "AND"):
+                recipes = searcher.and_search()
+            else:
+                recipes = searcher.or_search()
+            serializer = Recipe_Serializer(recipes, many=True)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except Exception as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
         

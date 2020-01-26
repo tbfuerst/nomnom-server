@@ -22,6 +22,12 @@ class Recipe_Serializer(serializers.ModelSerializer):
                   'cook_time_minutes', 'instructions', 'tags']
 
 
+class Recipe_Serializer_Short(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ['id', 'name']
+
+
 class Ingredient_Serializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient

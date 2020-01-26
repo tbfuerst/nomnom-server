@@ -2,7 +2,7 @@
 
 from nomnom.models import IngredientSet, Recipe
 from collections import Counter
-from nomnom.serializers import Recipe_Serializer
+from nomnom.serializers import Recipe_Serializer_Short
 
 class TagSearcher:
     def __init__(self, search_content: list):
@@ -38,8 +38,9 @@ class TagSearcher:
         for found_recipe in taglist_length_equals:
             reduced_found_recipes_and.append(found_recipe)
 
-        and_serializer = Recipe_Serializer(reduced_found_recipes_and, many=True)
-        or_serializer = Recipe_Serializer(reduced_found_recipes_or, many=True)
+        and_serializer = Recipe_Serializer_Short(reduced_found_recipes_and, many=True)
+        or_serializer = Recipe_Serializer_Short(
+            reduced_found_recipes_or, many=True)
 
         
         response = {'all_tags': and_serializer.data,

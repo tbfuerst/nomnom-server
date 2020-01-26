@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status
-from .models import Tag_Category, Tag, Ingredient
-from .serializers import Tag_Category_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer
+from .models import Tag_Category, Tag, Ingredient, Recipe
+from .serializers import Tag_Category_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer_Short
 from .api_lib.searchers import IngredientSearcher, TagSearcher
  
 
@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 
 
-class IngredientsList(APIView):
+class Ingredients_List(APIView):
 
     def get(self, request):
         """Returns a JSON of all Existing Ingredients"""
@@ -18,7 +18,15 @@ class IngredientsList(APIView):
         serializer = Ingredient_Serializer(ingredients, many=True)
         return JsonResponse(serializer.data, safe=False)
 
-class IngredientsSearch(APIView):
+
+class Recipe_List(APIView):
+    def get(self, request):
+        ''' Returns all Recipe names '''
+        recipes = Recipe.objects.all()
+        serializer = Recipe_Serializer_Short(recipes, many=True)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+
+class Ingredients_Search(APIView):
     def post(self, request):
         """Returns a JSON of Recipes which contain the ingredients,
         provided by the request
@@ -31,12 +39,12 @@ class IngredientsSearch(APIView):
                 recipes = searcher.and_search()
             else:
                 recipes = searcher.or_search()
-            serializer = Recipe_Serializer(recipes, many=True)
+            serializer = Recipe_Serializer_Short(recipes, many=True)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
 
-class TagSearch(APIView):
+class Tag_Search(APIView):
     def post(self, request):
         try:
             searcher = TagSearcher(request.data)

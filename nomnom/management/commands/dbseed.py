@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 
 from nomnom.models import Tag_Category, Tag, Ingredient, Recipe, IngredientSet, Recipe_Book
+
 from django.contrib.auth.models import User
 
 from random_words import RandomWords
@@ -12,7 +13,6 @@ import random as rnd
 
 class Command(BaseCommand):
     help = 'Creates mock data and fills database with it.'
-
 
     def handle(self, *args, **options):
         amount_tag_categories = 5
@@ -37,7 +37,7 @@ class Command(BaseCommand):
             start_dt = date.today().replace(day=1, month=1).toordinal()
             end_dt = date.today().replace(day=31, month=12).toordinal()
             random_days = rnd.randint(start_dt, end_dt)
-            if (random_days == 737484): #handle Feb 29
+            if (random_days == 737484): # handle Feb 29
                 random_days = 737483
             rnd_date = date.fromordinal(random_days)
             rnd_date.replace(year=year)

@@ -2,8 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .models import Tag_Category, Tag, Ingredient, Recipe
 from .serializers import Tag_Category_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer_Short
-from .api_lib.searchers import IngredientSearcher, TagSearcher
- 
+from .api_lib.searchers import IngredientSearcher, TagSearcher, RecipeSearcher
 
 # Create your views here.
 from django.http import HttpResponse
@@ -26,6 +25,7 @@ class Recipe_List(APIView):
         serializer = Recipe_Serializer_Short(recipes, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
+
 class Ingredients_Search(APIView):
     def post(self, request):
         """Returns a JSON of Recipes which contain the ingredients,
@@ -44,6 +44,7 @@ class Ingredients_Search(APIView):
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
 
+
 class Tag_Search(APIView):
     def post(self, request):
         try:
@@ -52,7 +53,18 @@ class Tag_Search(APIView):
             return JsonResponse(recipeData, status=status.HTTP_200_OK)
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
-        
+
+
+class Recipe_Search(APIView):
+    def post(self, request):
+        try:
+            searcher = RecipeSearcher(request.data['recipe'])
+            recipe_data = searcher.search()
+            serializer = Recipe_Serializer_Short(recipe_data)
+            return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+        except RuntimeError as error:
+            return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
 
 class Tag_Tag_Category_List(APIView):
     def get(self, request):
@@ -65,26 +77,13 @@ class Tag_Tag_Category_List(APIView):
         
         return JsonResponse(tagInformation, status=status.HTTP_200_OK)
 
-        
-        
-def index(request):
-    return HttpResponse("Hello, world. You're at the index.")
-
-def get_all_tag_categories(request):
-    if request.method == 'GET':
-        tagC = Tag_Category.objects.all()
-        serializer = Tag_Category_Serializer(tagC, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-def get_all_tags(request):
-    if request.method == 'GET':
-        tags = Tag.objects.all()
-        serializer = Tag_Serializer(tags, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-
+    
 class Tag_Category_List(APIView):
     def get(self, request, format=None):
         tag_categories = Tag_Category.objects.all()
         serializer = Tag_Category_Serializer(tag_categories, many=True)
         return JsonResponse(serializer.data)
+
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the index.")

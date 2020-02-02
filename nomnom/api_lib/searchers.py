@@ -4,6 +4,21 @@ from nomnom.models import IngredientSet, Recipe
 from collections import Counter
 from nomnom.serializers import Recipe_Serializer_Short
 
+
+class RecipeSearcher:
+    def __init__(self, recipe_id: int):
+        self.searched_recipe_id = recipe_id
+    
+    def search(self):
+        found_recipe = Recipe.objects.filter(id=self.searched_recipe_id)
+        print(found_recipe)
+        if found_recipe:  # read: if found recipe not empty
+            print (found_recipe[0])
+            return found_recipe[0]
+        else:
+            raise RuntimeError()
+
+
 class TagSearcher:
     def __init__(self, search_content: list):
         self.searched_tags = search_content
@@ -13,14 +28,14 @@ class TagSearcher:
         found_tags = []
         
         for tag in self.searched_tags:
-            #print(tag)
-            uniqueId = int(tag['uniqueId'])
-            #print(uniqueId)
-            found_tags.append(uniqueId)
+            # print(tag)
+            unique_id = int(tag['uniqueId'])
+            # print(uniqueId)
+            found_tags.append(unique_id)
         
         all_found_recipes_or = []
-        for tagsId in found_tags:
-            all_found_recipes_or += Recipe.objects.filter(tags__id=tagsId)
+        for tags_id in found_tags:
+            all_found_recipes_or += Recipe.objects.filter(tags__id=tags_id)
 
         counted_recipes_or = Counter(all_found_recipes_or)
         reduced_found_recipes_or = []

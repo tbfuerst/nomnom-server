@@ -8,6 +8,7 @@ from .api_lib.searchers import IngredientSearcher, TagSearcher, RecipeSearcher, 
 # Authentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from oauth2_provider.views.generic import ProtectedResourceView
 
 # Response Libraries
 from django.http import HttpResponse
@@ -30,9 +31,9 @@ class Recipe_List(APIView):
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 
-class Ingredients_Search(APIView):
-    authentication_classes = (TokenAuthentication),
-    permission_classes = (IsAuthenticated),
+class Ingredients_Search(ProtectedResourceView):
+    #authentication_classes = (TokenAuthentication),
+    #permission_classes = (IsAuthenticated),
 
     def post(self, request):
         """Returns a JSON of Recipes which contain the ingredients,

@@ -1,16 +1,20 @@
+from rest_framework.authtoken import views
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import Tag_Category, Tag, Ingredient, Recipe
 from .serializers import Tag_Category_Serializer, IngredientSet_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer_Short, Recipe_Serializer
 from .api_lib.searchers import IngredientSearcher, TagSearcher, RecipeSearcher, IngredientSetSearcher
 
-# Create your views here.
+# Authentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+
+# Response Libraries
 from django.http import HttpResponse
 from django.http import JsonResponse
 
 
 class Ingredients_List(APIView):
-
     def get(self, request):
         """Returns a JSON of all Existing Ingredients"""
         ingredients = Ingredient.objects.all()
@@ -27,6 +31,9 @@ class Recipe_List(APIView):
 
 
 class Ingredients_Search(APIView):
+    authentication_classes = (TokenAuthentication),
+    permission_classes = (IsAuthenticated),
+
     def post(self, request):
         """Returns a JSON of Recipes which contain the ingredients,
         provided by the request

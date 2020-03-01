@@ -1,8 +1,10 @@
 from django.urls import path
+from rest_framework.authtoken import views
 from . import api
 
 
 urlpatterns = [
+    path('api-login', views.obtain_auth_token),
     path('get-all-ingredients', api.Ingredients_List.as_view()),
     path('search-by-ingredient', api.Ingredients_Search.as_view()),
     path('search-by-tag', api.Tag_Search.as_view()),

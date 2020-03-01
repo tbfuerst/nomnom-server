@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import Tag_Category, Tag, Ingredient, Recipe
-from .serializers import Tag_Category_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer_Short
-from .api_lib.searchers import IngredientSearcher, TagSearcher, RecipeSearcher
+from .serializers import Tag_Category_Serializer, IngredientSet_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer_Short, Recipe_Serializer
+from .api_lib.searchers import IngredientSearcher, TagSearcher, RecipeSearcher, IngredientSetSearcher
 
 # Create your views here.
 from django.http import HttpResponse
@@ -58,10 +58,22 @@ class Tag_Search(APIView):
 class Recipe_Search(APIView):
     def post(self, request):
         try:
-            searcher = RecipeSearcher(request.data['recipe'])
+            searcher = RecipeSearcher(request.data['id'])
             recipe_data = searcher.search()
             serializer = Recipe_Serializer_Short(recipe_data)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+        except RuntimeError as error:
+            return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Recipe_Details(APIView):
+    def post(self, request):
+        requestedID = request.data['id']
+        try:
+            searcher = RecipeSearcher(requestedID)
+            recipe_data = searcher.search()
+            recipe_serializer = Recipe_Serializer(recipe_data)
+            return JsonResponse(recipe_serializer.data, status=status.HTTP_200_OK)
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
 
@@ -73,11 +85,12 @@ class Tag_Tag_Category_List(APIView):
         tagC_serializer = Tag_Category_Serializer(tagC, many=True)
         tags_serializer = Tag_Serializer(tags, many=True)
 
-        tagInformation = {'tags': tags_serializer.data, 'tagCategories': tagC_serializer.data}
-        
+        tagInformation = {'tags': tags_serializer.data,
+                          'tagCategories': tagC_serializer.data}
+
         return JsonResponse(tagInformation, status=status.HTTP_200_OK)
 
-    
+
 class Tag_Category_List(APIView):
     def get(self, request, format=None):
         tag_categories = Tag_Category.objects.all()

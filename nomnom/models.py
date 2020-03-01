@@ -33,8 +33,8 @@ class Recipe(models.Model):
     id = models.AutoField(primary_key=True)
     creator = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
-    image = models.FileField(upload_to='recipe-images/')
-    thumbnail = models.FileField(upload_to='recipe-thumbs/')
+    image = models.ImageField(upload_to='recipe-images/')
+    thumbnail = models.ImageField(upload_to='recipe-thumbs/')
     amount_persons = models.PositiveSmallIntegerField()
     cook_time_minutes = models.PositiveSmallIntegerField()
     instructions = models.CharField(max_length=4096)
@@ -47,8 +47,10 @@ class Recipe(models.Model):
 
 class IngredientSet(models.Model):
     id = models.AutoField(primary_key=True)
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(
+        Recipe, related_name='ingredientsets', on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(
+        Ingredient, related_name='ingredientName', on_delete=models.CASCADE)
     amount = models.PositiveSmallIntegerField()
     unit = models.CharField(max_length=32)
 

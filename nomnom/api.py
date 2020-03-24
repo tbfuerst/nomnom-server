@@ -31,9 +31,7 @@ class Recipe_List(APIView):
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 
-class Ingredients_Search(ProtectedResourceView):
-    #authentication_classes = (TokenAuthentication),
-    #permission_classes = (IsAuthenticated),
+class Ingredients_Search(APIView):
 
     def post(self, request):
         """Returns a JSON of Recipes which contain the ingredients,
@@ -41,9 +39,11 @@ class Ingredients_Search(ProtectedResourceView):
 
         @param: list<String> request.data
         """
+        print(request.data)
         try:
-            searcher = IngredientSearcher(request.data[1:], request.data[0])
-            if (request.data[0] == "AND"):
+            searcher = IngredientSearcher(
+                request.data['ingredients'], request.data['search-type'])
+            if (request.data['search-type'] == "AND"):
                 recipes = searcher.and_search()
             else:
                 recipes = searcher.or_search()

@@ -56,7 +56,7 @@ class Ingredients_Search(APIView):
 class Tag_Search(APIView):
     def post(self, request):
         try:
-            searcher = TagSearcher(request.data)
+            searcher = TagSearcher(request.data['data'])
             recipeData = searcher.search()
             return JsonResponse(recipeData, status=status.HTTP_200_OK)
         except RuntimeError as error:

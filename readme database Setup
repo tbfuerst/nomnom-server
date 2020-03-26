@@ -30,3 +30,6 @@
 9 Directly access API with python3 manage.py shell
     9.1 from nomnom.models import [model1], [model2]
 10 run python3 manage.py dbseed to add some mock data
+
+Deploying the app:
+https://www.caktusgroup.com/blog/2017/03/14/production-ready-dockerfile-your-python-django-app/

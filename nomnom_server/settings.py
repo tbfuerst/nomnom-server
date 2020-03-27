@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+if os.getenv('DOCKER_CONTAINER'):
+    POSTGRES_HOST = 'db'
+else:
+    POSTGRES_HOST = '/var/run/postgresql'
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,7 +33,7 @@ SECRET_KEY = 't%$a_)&+faej$utwx!_$nq85l-1y!$t-5utm@+=i7nc%7=ffw*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.8.0.18']
+ALLOWED_HOSTS = ['10.8.0.18', '127.0.0.1']
 
 
 # Application definition
@@ -47,7 +53,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # Activate for hosting on internet!!!!
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -85,8 +90,8 @@ DATABASES = {
         'NAME': 'nomnom_db',
         'USER': 'nomnom',
         'PASSWORD': 'admin',
-        'HOST': '/var/run/postgresql',
-        'PORT': 5432,
+        'HOST': POSTGRES_HOST,
+        'PORT': 5435,
     }
 }
 

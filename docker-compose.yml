@@ -2,15 +2,17 @@ version: "3"
 services:
 
   db:
-    image: postgres:12.2
+    image: postgres
+    restart: always
     expose: 
       - 5435
-    volumes: 
-      - pg_data:/var/lib/postgresql/pg_data
-      - pg_backups:/pg_backups
     environment: 
-      - POSTGRES_USER=nomnom
-      - POSTGRES_PASSWORD=admin
+      POSTGRES_USER: postgres
+      PGUSER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes: 
+      - pg_data:/var/lib/postgresql/docker/data
+
 
   nomnom_api:
     build: .
@@ -20,5 +22,4 @@ services:
       - db
 
 volumes:
-  pg_data: {}
-  pg_backups: {}
+  pg_data:

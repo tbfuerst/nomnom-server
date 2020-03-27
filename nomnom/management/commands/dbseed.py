@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from random_words import RandomWords
 from datetime import date
 import random as rnd
+from random import randint
 
 # dirty seeder
 

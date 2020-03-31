@@ -30,13 +30,18 @@ class IngredientSetSearcher:
 
 
 class RecipeSearcher:
-    def __init__(self, recipe_id: int):
+    def __init__(self, recipe_id: int, requester: str):
         self.searched_recipe_id = recipe_id
+        self.requester = requester
 
     def search(self):
         found_recipe = Recipe.objects.filter(id=self.searched_recipe_id)
         if found_recipe:  # read: if found recipe not empty
-            return found_recipe[0]
+            if found_recipe[0].creator == self.requester:
+                is_owner = True
+            else:
+                is_owner = False
+            return {'recipe': found_recipe[0], 'isOwner': is_owner}
         else:
             raise RuntimeError()
 

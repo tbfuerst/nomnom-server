@@ -127,11 +127,16 @@ class Recipe_Search(APIView):
 class Recipe_Details(APIView):
     def post(self, request):
         requestedID = request.data['id']
+        print(request.user)
         try:
-            searcher = RecipeSearcher(requestedID)
+            searcher = RecipeSearcher(requestedID, request.user)
             recipe_data = searcher.search()
-            recipe_serializer = Recipe_Serializer(recipe_data)
-            return JsonResponse(recipe_serializer.data, status=status.HTTP_200_OK)
+            recipe_serializer = Recipe_Serializer(recipe_data['recipe'])
+            recipt_with_owner_info = {
+                'recipe': recipe_serializer.data,
+                'isOwner': recipe_data['isOwner']
+            }
+            return JsonResponse(recipt_with_owner_info, status=status.HTTP_200_OK)
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
 

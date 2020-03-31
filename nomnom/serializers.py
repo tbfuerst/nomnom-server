@@ -1,6 +1,12 @@
 from rest_framework import serializers
-#from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from .models import Tag_Category, Tag, Recipe, Ingredient, IngredientSet
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', "first_name", "last_name")
 
 
 class Tag_Category_Serializer(serializers.ModelSerializer):
@@ -37,11 +43,12 @@ class IngredientSet_Serializer(serializers.ModelSerializer):
 class Recipe_Serializer(serializers.ModelSerializer):
     ingredientsets = IngredientSet_Serializer(
         many=True, read_only=True)
+    subscribed_by = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Recipe
         fields = ['id', 'creator', 'name', 'amount_persons',
-                  'cook_time_minutes', 'ingredientsets', 'instructions', 'tags']
+                  'cook_time_minutes', 'ingredientsets', 'instructions', 'tags', 'subscribed_by']
         depth = 2
 
 # doku: https://www.django-rest-framework.org/tutorial/1-serialization/#working-with-serializers

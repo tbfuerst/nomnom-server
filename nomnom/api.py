@@ -46,19 +46,29 @@ class Add_Edit_Recipe(APIView):
                 except RuntimeError as error:
                     return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
                 recipe.save()
+
+            if (recipe_data['id'] is not None):
+                try:
+                    ingredients = IngredientSet.objects.filter(recipe=recipe)
+                    for ingredient in ingredients:
+                        ingredient.delete()
+                    print(ingredients)
+                except RuntimeError as error:
+                    return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
             # create ingredientsets and connect to recipe
             for ingredient_data in recipe_data['ingredients']:
                 try:
-                    ingredient = Ingredient.objects.filter(
+                    ingredient=Ingredient.objects.filter(
                         id=ingredient_data['id'])
                 except RuntimeError as error:
                     return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
-                ingredientSet = IngredientSet(
+                ingredientSet=IngredientSet(
                     recipe=recipe, ingredient=ingredient[0], amount=ingredient_data['amount'], unit=ingredient_data['unit'])
                 ingredientSet.save()
 
             # return newly given recipe id for client access it
-            response = {'new_recipe_id': recipe.id}
+            response={'new_recipe_id': recipe.id}
             return JsonResponse(response, status=status.HTTP_200_OK)
 
         except RuntimeError as error:
@@ -68,16 +78,16 @@ class Add_Edit_Recipe(APIView):
 class Ingredients_List(APIView):
     def get(self, request):
         """Returns a JSON of all Existing Ingredients"""
-        ingredients = Ingredient.objects.all()
-        serializer = Ingredient_Serializer(ingredients, many=True)
+        ingredients=Ingredient.objects.all()
+        serializer=Ingredient_Serializer(ingredients, many=True)
         return JsonResponse(serializer.data, safe=False)
 
 
 class Recipe_List(APIView):
     def get(self, request):
         ''' Returns all Recipe names '''
-        recipes = Recipe.objects.all()
-        serializer = Recipe_Serializer_Short(recipes, many=True)
+        recipes=Recipe.objects.all()
+        serializer=Recipe_Serializer_Short(recipes, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 
@@ -91,13 +101,13 @@ class Ingredients_Search(APIView):
         """
         print(request.user)
         try:
-            searcher = IngredientSearcher(
+            searcher=IngredientSearcher(
                 request.data['ingredients'], request.data['search-type'])
             if (request.data['search-type'] == "AND"):
-                recipes = searcher.and_search()
+                recipes=searcher.and_search()
             else:
-                recipes = searcher.or_search()
-            serializer = Recipe_Serializer_Short(recipes, many=True)
+                recipes=searcher.or_search()
+            serializer=Recipe_Serializer_Short(recipes, many=True)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
@@ -106,8 +116,8 @@ class Ingredients_Search(APIView):
 class Tag_Search(APIView):
     def post(self, request):
         try:
-            searcher = TagSearcher(request.data['data'])
-            recipeData = searcher.search()
+            searcher=TagSearcher(request.data['data'])
+            recipeData=searcher.search()
             return JsonResponse(recipeData, status=status.HTTP_200_OK)
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
@@ -116,9 +126,9 @@ class Tag_Search(APIView):
 class Recipe_Search(APIView):
     def post(self, request):
         try:
-            searcher = RecipeSearcher(request.data['id'])
-            recipe_data = searcher.search()
-            serializer = Recipe_Serializer_Short(recipe_data)
+            searcher=RecipeSearcher(request.data['id'])
+            recipe_data=searcher.search()
+            serializer=Recipe_Serializer_Short(recipe_data)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
@@ -126,13 +136,13 @@ class Recipe_Search(APIView):
 
 class Recipe_Details(APIView):
     def post(self, request):
-        requestedID = request.data['id']
+        requestedID=request.data['id']
         print(request.user)
         try:
-            searcher = RecipeSearcher(requestedID, request.user)
-            recipe_data = searcher.search()
-            recipe_serializer = Recipe_Serializer(recipe_data['recipe'])
-            recipt_with_owner_info = {
+            searcher=RecipeSearcher(requestedID, request.user)
+            recipe_data=searcher.search()
+            recipe_serializer=Recipe_Serializer(recipe_data['recipe'])
+            recipt_with_owner_info={
                 'recipe': recipe_serializer.data,
                 'isOwner': recipe_data['isOwner']
             }
@@ -143,12 +153,12 @@ class Recipe_Details(APIView):
 
 class Tag_Tag_Category_List(APIView):
     def get(self, request):
-        tagC = Tag_Category.objects.all()
-        tags = Tag.objects.all()
-        tagC_serializer = Tag_Category_Serializer(tagC, many=True)
-        tags_serializer = Tag_Serializer(tags, many=True)
+        tagC=Tag_Category.objects.all()
+        tags=Tag.objects.all()
+        tagC_serializer=Tag_Category_Serializer(tagC, many=True)
+        tags_serializer=Tag_Serializer(tags, many=True)
 
-        tagInformation = {'tags': tags_serializer.data,
+        tagInformation={'tags': tags_serializer.data,
                           'tagCategories': tagC_serializer.data}
 
         return JsonResponse(tagInformation, status=status.HTTP_200_OK)
@@ -156,8 +166,8 @@ class Tag_Tag_Category_List(APIView):
 
 class Tag_Category_List(APIView):
     def get(self, request, format=None):
-        tag_categories = Tag_Category.objects.all()
-        serializer = Tag_Category_Serializer(tag_categories, many=True)
+        tag_categories=Tag_Category.objects.all()
+        serializer=Tag_Category_Serializer(tag_categories, many=True)
         return JsonResponse(serializer.data)
 
 

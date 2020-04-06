@@ -53,9 +53,10 @@ class RecipeSearcher:
 
 
 class TagSearcher:
-    def __init__(self, search_content: list, search_range: str):
+    def __init__(self, search_content: list, search_range: str, requester: str):
         self.searched_tags = search_content
         self.search_range = search_range
+        self.requester = requester
 
     # TODO: Filter for subscribed
     def search(self):
@@ -74,8 +75,15 @@ class TagSearcher:
 
         counted_recipes_or = Counter(all_found_recipes_or)
         reduced_found_recipes_or = []
-        for unique_recipe_or in counted_recipes_or:
-            reduced_found_recipes_or.append(unique_recipe_or)
+
+        if self.search_range == "subscribed":
+            for unique_recipe_or in counted_recipes_or:
+                for subscriber in unique_recipe_or.subscribed_by.all():
+                    if self.requester == subscriber:
+                        reduced_found_recipes_or.append(unique_recipe_or)
+        else:
+            for unique_recipe_or in counted_recipes_or:
+                reduced_found_recipes_or.append(unique_recipe_or)
 
         all_found_recipes_and = []
         for tagsId in found_tags:
@@ -85,8 +93,15 @@ class TagSearcher:
         reduced_found_recipes_and = []
         taglist_length_equals = Counter(
             recipe for recipe in c.elements() if c[recipe] == taglist_length)
-        for found_recipe in taglist_length_equals:
-            reduced_found_recipes_and.append(found_recipe)
+
+        if self.search_range == "subscribed":
+            for found_recipe in taglist_length_equals:
+                for subscriber in found_recipe.subscribed_by.all():
+                    if self.requester == subscriber:
+                        reduced_found_recipes_and.append(found_recipe)
+        else:
+            for found_recipe in taglist_length_equals:
+                reduced_found_recipes_and.append(found_recipe)
 
         and_serializer = Recipe_Serializer_Short(
             reduced_found_recipes_and, many=True)

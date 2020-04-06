@@ -40,10 +40,17 @@ class IngredientSet_Serializer(serializers.ModelSerializer):
         depth = 1  # include Ingredient Object
 
 
+class Reciper(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ['id', 'creator', 'name', 'amount_persons',
+                  'cook_time_minutes', 'ingredientsets', 'instructions', 'tags']
+        depth = 2
+
+
 class Recipe_Serializer(serializers.ModelSerializer):
     ingredientsets = IngredientSet_Serializer(
         many=True, read_only=True)
-    subscribed_by = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Recipe

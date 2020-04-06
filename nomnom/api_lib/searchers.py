@@ -2,7 +2,7 @@
 
 from nomnom.models import IngredientSet, Recipe, Ingredient
 from collections import Counter
-from nomnom.serializers import Recipe_Serializer_Short, IngredientSet_Serializer, Ingredient_Serializer
+from nomnom.serializers import Recipe_Serializer_Short, IngredientSet_Serializer, Ingredient_Serializer, Recipe_Serializer
 
 
 class IngredientSetSearcher:
@@ -41,15 +41,23 @@ class RecipeSearcher:
                 is_owner = True
             else:
                 is_owner = False
-            return {'recipe': found_recipe[0], 'isOwner': is_owner}
+            print(found_recipe[0])
+            is_subscriber = False
+            for username in found_recipe[0].subscribed_by.all():
+                if username == self.requester:
+                    is_subscriber = True
+
+            return {'recipe': found_recipe[0], 'isOwner': is_owner, 'isSubscribed': is_subscriber}
         else:
             raise RuntimeError()
 
 
 class TagSearcher:
-    def __init__(self, search_content: list):
+    def __init__(self, search_content: list, search_range: str):
         self.searched_tags = search_content
+        self.search_range = search_range
 
+    # TODO: Filter for subscribed
     def search(self):
         taglist_length = len(self.searched_tags)
         found_tags = []
@@ -92,9 +100,12 @@ class TagSearcher:
 
 
 class IngredientSearcher:
-    def __init__(self, search_content: list, search_type: str):
+    def __init__(self, search_content: list, search_type: str, search_range: str):
         self.searched_ingredients = search_content
         self.operator = search_type
+        self.search_range = search_range
+
+    # TODO: Filter for subscribed type
 
     def or_search(self):
         intro = "Searching: \"" + \

@@ -127,7 +127,6 @@ class IngredientSearcher:
 
         # extract and save the found recipes
         found_recipes = []
-        print(self.requester)
         if self.search_range == "subscribed":
             for ingredient_set in ingredient_sets:
                 for subscriber in ingredient_set.recipe.subscribed_by.all():
@@ -196,7 +195,14 @@ class IngredientSearcher:
 
         # make a list out of it
         found_recipes = []
-        for found_recipe in search_word_equals:
-            found_recipes.append(found_recipe)
+        if self.search_range == "subscribed":
+            for found_recipe in search_word_equals:
+                for subscriber in found_recipe.subscribed_by.all():
+                    if self.requester == subscriber:
+                        found_recipes.append(found_recipe)
+
+        else:
+            for found_recipe in search_word_equals:
+                found_recipes.append(found_recipe)
 
         return found_recipes

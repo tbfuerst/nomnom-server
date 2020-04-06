@@ -91,6 +91,12 @@ class Recipe_List(APIView):
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
 
+class Edit_Subscription(APIView):
+    def post(self, request):
+        print(request.data)
+        return JsonResponse(True, safe=False, status=status.HTTP_200_OK)
+
+
 class Ingredients_Search(APIView):
 
     def post(self, request):
@@ -99,10 +105,9 @@ class Ingredients_Search(APIView):
 
         @param: list<String> request.data
         """
-        print(request.user)
         try:
             searcher = IngredientSearcher(
-                request.data['ingredients'], request.data['search-type'], request.data['search-range'])
+                request.data['ingredients'], request.data['search-type'], request.data['search-range'], request.user)
             if (request.data['search-type'] == "AND"):
                 recipes = searcher.and_search()
             else:

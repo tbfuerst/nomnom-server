@@ -100,30 +100,42 @@ class TagSearcher:
 
 
 class IngredientSearcher:
-    def __init__(self, search_content: list, search_type: str, search_range: str):
+    def __init__(self, search_content: list, search_type: str, search_range: str, requester: str):
         self.searched_ingredients = search_content
         self.operator = search_type
         self.search_range = search_range
+        self.requester = requester
 
     # TODO: Filter for subscribed type
 
     def or_search(self):
         intro = "Searching: \"" + \
             ', '.join(self.searched_ingredients) + \
-            "\" with operator: " + self.operator
+            "\" with operator: " + self.operator + \
+            "\" with range: " + self.search_range
 
         # The following code creates a List ingredient_sets_queries which contains all ingredient_sets
         # containing the searched Ingredients
         ingredient_sets = []
+
+        print(intro)
         for ingredient_word in self.searched_ingredients:
+
             found_ingredient_set = IngredientSet.objects.filter(
                 ingredient__name=ingredient_word)  # field lookup
             ingredient_sets += found_ingredient_set
 
         # extract and save the found recipes
         found_recipes = []
-        for ingredient_set in ingredient_sets:
-            found_recipes.append(ingredient_set.recipe)
+        print(self.requester)
+        if self.search_range == "subscribed":
+            for ingredient_set in ingredient_sets:
+                for subscriber in ingredient_set.recipe.subscribed_by.all():
+                    if self.requester == subscriber:
+                        found_recipes.append(ingredient_set.recipe)
+        else:
+            for ingredient_set in ingredient_sets:
+                found_recipes.append(ingredient_set.recipe)
 
         # reduce list to unique Recipes
         countedRecipes = Counter(found_recipes)
@@ -136,12 +148,14 @@ class IngredientSearcher:
     def and_search(self):
         intro = "Searching: \"" + \
             ', '.join(self.searched_ingredients) + \
-            "\" with operator: " + self.operator
+            "\" with operator: " + self.operator + \
+            "\" with range: " + self.search_range
 
         search_word_count = len(self.searched_ingredients)
 
         # This code creates a List ingredient_sets_queries which contains all ingredient_sets
         # containing the searched Ingredients
+        print(intro)
 
         ingredient_sets_queries = []
         for ingredient_word in self.searched_ingredients:

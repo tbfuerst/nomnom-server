@@ -10,7 +10,8 @@ class IngredientSetSearcher:
         self.searched_recipe_id = recipe_id
 
     def search(self):
-        searched_recipe = Recipe.objects.filter(id=self.searched_recipe_id)
+        searched_recipe = Recipe.objects.filter(
+            id=self.searched_recipe_id, is_deleted=False)
         found_ingredient_sets = IngredientSet.objects.filter(
             recipe__in=searched_recipe).select_related('ingredient')
 
@@ -35,7 +36,8 @@ class RecipeSearcher:
         self.requester = requester
 
     def search(self):
-        found_recipe = Recipe.objects.filter(id=self.searched_recipe_id)
+        found_recipe = Recipe.objects.filter(
+            id=self.searched_recipe_id, is_deleted=False)
         if found_recipe:  # read: if found recipe not empty
             if found_recipe[0].creator == self.requester:
                 is_owner = True
@@ -71,7 +73,8 @@ class TagSearcher:
 
         all_found_recipes_or = []
         for tags_id in found_tags:
-            all_found_recipes_or += Recipe.objects.filter(tags__id=tags_id)
+            all_found_recipes_or += Recipe.objects.filter(
+                tags__id=tags_id, is_deleted=False)
 
         counted_recipes_or = Counter(all_found_recipes_or)
         reduced_found_recipes_or = []
@@ -87,7 +90,8 @@ class TagSearcher:
 
         all_found_recipes_and = []
         for tagsId in found_tags:
-            all_found_recipes_and += Recipe.objects.filter(tags__id=tagsId)
+            all_found_recipes_and += Recipe.objects.filter(
+                tags__id=tagsId, is_deleted=False)
 
         c = Counter(all_found_recipes_and)
         reduced_found_recipes_and = []
@@ -141,6 +145,8 @@ class IngredientSearcher:
             ingredient_sets += found_ingredient_set
 
         # extract and save the found recipes
+
+        #TODO: Filter deleted Recipes!
         found_recipes = []
         if self.search_range == "subscribed":
             for ingredient_set in ingredient_sets:
@@ -183,6 +189,7 @@ class IngredientSearcher:
         # This means, the found recipes contain the searched Ingredients
 
         recipe_list = []
+        #TODO: Filter deleted Recipes!
 
         # search every search query separately
         for ingredient_sets_query in ingredient_sets_queries:

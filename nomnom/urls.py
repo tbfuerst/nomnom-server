@@ -46,7 +46,9 @@ class GroupList(generics.ListAPIView):
 
 urlpatterns = [
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    path('edit-delete', api.Edit_Delete.as_view()),
     path('add-edit-recipe', api.Add_Edit_Recipe.as_view()),
+    path('add-edit-ingredient', api.Add_Edit_Ingredient.as_view()),
     path('api-login', views.obtain_auth_token),
     path('get-all-ingredients', api.Ingredients_List.as_view()),
     path('get-full-tag-info', api.Tag_Tag_Category_List.as_view()),
@@ -56,6 +58,6 @@ urlpatterns = [
     path('search-by-ingredient', api.Ingredients_Search.as_view()),
     path('search-by-tag', api.Tag_Search.as_view()),
     path('search-for-recipe', api.Recipe_Search.as_view()),
-
+    
 
 ]

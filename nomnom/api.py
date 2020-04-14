@@ -86,7 +86,7 @@ class Ingredients_List(APIView):
 class Recipe_List(APIView):
     def get(self, request):
         ''' Returns all Recipe names '''
-        recipes = Recipe.objects.all()
+        recipes = Recipe.objects.filter(is_deleted=False)
         serializer = Recipe_Serializer_Short(recipes, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 
@@ -94,7 +94,50 @@ class Recipe_List(APIView):
 class Edit_Subscription(APIView):
     def post(self, request):
         print(request.data)
+        try:
+            user = request.user
+            recipe = Recipe.objects.filter(id=request.data['recipeId'])
+            if request.data['isSubscribed'] == False:
+                recipe[0].subscribed_by.remove(user)
+            else:
+                recipe[0].subscribed_by.add(user)
+            recipe[0].save()
+            return JsonResponse(request.data['isSubscribed'], safe=False, status=status.HTTP_200_OK)
+
+        except RuntimeError as error:
+            return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Edit_Delete(APIView):
+    def post(self, request):
+        print(request.data)
+        searcher = RecipeSearcher(request.data['id'], request.user)
+        recipe_data = searcher.search()['recipe']
+        recipe_data.is_deleted = True
+        recipe_data.save()
         return JsonResponse(True, safe=False, status=status.HTTP_200_OK)
+
+
+class Add_Edit_Ingredient(APIView):
+    def post(self, request):
+        try:
+            print(request.data)
+            if ('id' in request.data):
+                newIngredient = Ingredient(
+                    name=request.data['name'], id=request.data['id'])
+            else:
+                newIngredient = Ingredient(name=request.data['name'])
+            newIngredient.save()
+            serializer = Ingredient_Serializer(newIngredient)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        except RuntimeError as error:
+            return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Add_Tag(APIView):
+    def post(self, request):
+        print(request.data)
+        return JsonResponse(request.data, safe=False, status=status.HTTP_200_OK)
 
 
 class Ingredients_Search(APIView):

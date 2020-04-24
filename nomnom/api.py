@@ -1,22 +1,23 @@
+from django.http import JsonResponse
+from django.http import HttpResponse
+from oauth2_provider.views.generic import ProtectedResourceView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from .api_lib.searchers import IngredientSearcher, TagSearcher, RecipeSearcher, IngredientSetSearcher
 from rest_framework.authtoken import views
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import Tag_Category, Tag, Ingredient, Recipe, IngredientSet
 from .serializers import Tag_Category_Serializer, IngredientSet_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer_Short, Recipe_Serializer
-from .api_lib.searchers import IngredientSearcher, TagSearcher, RecipeSearcher, IngredientSetSearcher
 
 # Authentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
-from oauth2_provider.views.generic import ProtectedResourceView
 
 # Response Libraries
-from django.http import HttpResponse
-from django.http import JsonResponse
 
 
 class Add_Edit_Recipe(APIView):
     def post(self, request):
+        print(request.data)
         try:
             # create basic recipe model
             recipe_data = request.data['recipe']
@@ -63,6 +64,7 @@ class Add_Edit_Recipe(APIView):
                         id=ingredient_data['id'])
                 except RuntimeError as error:
                     return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
                 ingredientSet = IngredientSet(
                     recipe=recipe, ingredient=ingredient[0], amount=ingredient_data['amount'], unit=ingredient_data['unit'])
                 ingredientSet.save()
@@ -112,10 +114,28 @@ class Edit_Delete(APIView):
     def post(self, request):
         print(request.data)
         searcher = RecipeSearcher(request.data['id'], request.user)
-        recipe_data = searcher.search()['recipe']
-        recipe_data.is_deleted = True
-        recipe_data.save()
-        return JsonResponse(True, safe=False, status=status.HTTP_200_OK)
+        found_recipe = searcher.search()
+
+        recipe_data = found_recipe['recipe']
+
+        if recipe_data.subscribed_by.all().count() <= 1:
+            if found_recipe['isOwner'] == True:
+                recipe_data.is_deleted = True
+                recipe_data.save()
+                return JsonResponse({'deleted': True, 'newSubscriber': False}, safe=False, status=status.HTTP_200_OK)
+            else:
+                return HttpResponse('You are not the Owner!', status=status.HTTP_403_FORBIDDEN)
+        else:
+            for subscriber in recipe_data.subscribed_by.all():
+                if subscriber != request.user:
+                    next_subscriber = subscriber
+                    print(next_subscriber)
+                    break
+
+            recipe_data.subscribed_by.remove(request.user)
+            recipe_data.creator = next_subscriber
+            recipe_data.save()
+            return JsonResponse({'deleted': False, 'newSubscriber': True}, safe=False, status=status.HTTP_200_OK)
 
 
 class Add_Edit_Ingredient(APIView):
@@ -129,6 +149,62 @@ class Add_Edit_Ingredient(APIView):
                 newIngredient = Ingredient(name=request.data['name'])
             newIngredient.save()
             serializer = Ingredient_Serializer(newIngredient)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        except RuntimeError as error:
+            return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Add_Edit_Tag(APIView):
+    def post(self, request):
+        try:
+            print(request.data)
+            category = Tag_Category.objects.filter(
+                id=request.data['categoryID'])[0]
+
+            if ('id' in request.data):
+                newTag = Tag(
+                    name=request.data['name'], id=request.data['id'], category=category)
+            else:
+                newTag = Tag(
+                    name=request.data['name'], category=category)
+            newTag.save()
+            serializer = Tag_Serializer(newIngredient)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        except RuntimeError as error:
+            return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Add_Edit_Tag_Category(APIView):
+    def post(self, request):
+        try:
+            print(request.data)
+            if ('id' in request.data):
+                newTagCat = Tag_Category(
+                    name=request.data['name'], id=request.data['id'])
+            else:
+                newTagCat = Tag_Category(name=request.data['name'])
+            newTagCat.save()
+            serializer = Tag_Category_Serializer(newIngredient)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        except RuntimeError as error:
+            return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Users_Recipes(APIView):
+    def get(self, request):
+        try:
+            recipes = Recipe.objects.filter(creator=request.user)
+            serializer = Recipe_Serializer_Short(recipes, many=True)
+            return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        except RuntimeError as error:
+            return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Subscribed_Recipes(APIView):
+    def get(self, request):
+        try:
+            recipes = Recipe.objects.filter(subscribed_by=request.user)
+            serializer = Recipe_Serializer_Short(recipes, many=True)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)

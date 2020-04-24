@@ -49,8 +49,12 @@ urlpatterns = [
     path('edit-delete', api.Edit_Delete.as_view()),
     path('add-edit-recipe', api.Add_Edit_Recipe.as_view()),
     path('add-edit-ingredient', api.Add_Edit_Ingredient.as_view()),
+    path('add-edit-tag', api.Add_Edit_Tag.as_view()),
+    path('add-edit-tag-category', api.Add_Edit_Tag_Category.as_view()),
     path('api-login', views.obtain_auth_token),
     path('get-all-ingredients', api.Ingredients_List.as_view()),
+    path('get-my-recipes', api.Users_Recipes.as_view()),
+    path('get-my-subscribed-recipes', api.Subscribed_Recipes.as_view()),
     path('get-full-tag-info', api.Tag_Tag_Category_List.as_view()),
     path('get-recipe-list', api.Recipe_List.as_view()),
     path('edit-subscription', api.Edit_Subscription.as_view()),
@@ -58,6 +62,6 @@ urlpatterns = [
     path('search-by-ingredient', api.Ingredients_Search.as_view()),
     path('search-by-tag', api.Tag_Search.as_view()),
     path('search-for-recipe', api.Recipe_Search.as_view()),
-    
+
 
 ]

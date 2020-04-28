@@ -168,7 +168,7 @@ class Add_Edit_Tag(APIView):
                 newTag = Tag(
                     name=request.data['name'], category=category)
             newTag.save()
-            serializer = Tag_Serializer(newIngredient)
+            serializer = Tag_Serializer(newTag)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
@@ -184,7 +184,7 @@ class Add_Edit_Tag_Category(APIView):
             else:
                 newTagCat = Tag_Category(name=request.data['name'])
             newTagCat.save()
-            serializer = Tag_Category_Serializer(newIngredient)
+            serializer = Tag_Category_Serializer(newTagCat)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except RuntimeError as error:
             return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)

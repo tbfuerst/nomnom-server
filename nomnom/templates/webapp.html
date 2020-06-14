@@ -16,16 +16,13 @@
   <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
 
   <title>nomnom</title>
-  <link rel="manifest" href="{% static 'manifest.json' %}">
+  <link rel="manifest" href="opt/app{% static 'manifest.json' %}">
 </head>
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script>
-    console.log("static")
-    var static_url = "{% get_static_prefix %}";
-    console.log(static_url)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
         navigator.serviceWorker.register("{% static 'flutter_service_worker.js' %}", {scope: './'});

@@ -15,3 +15,7 @@ class Command(BaseCommand):
         for line in reader:
             dict_list.append(line)
         pprint.pprint(dict_list)
+
+        for ingredient in dict_list:
+            ingred = Ingredient(name=ingredient)
+            ingred.save()

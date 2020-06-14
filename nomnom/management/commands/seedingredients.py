@@ -10,7 +10,8 @@ class Command(BaseCommand):
     help = 'Creates mock data and fills database with it.'
 
     def handle(self, *args, **options):
-        reader = csv.DictReader(open("API\Zutatenliste.csv", 'r'))
+        reader = csv.DictReader(
+            open("/opt/app/nomnom/management/commands/Zutatenliste.csv", 'r'))
         dict_list = []
         for line in reader:
             dict_list.append(line)

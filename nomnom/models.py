@@ -34,8 +34,7 @@ class Recipe(models.Model):
     creator = models.ForeignKey(
         'auth.User', on_delete=models.CASCADE, related_name="creator")
     name = models.CharField(max_length=64)
-    image = models.ImageField(upload_to='recipe-images/')
-    thumbnail = models.ImageField(upload_to='recipe-thumbs/')
+    image = models.TextField()
     amount_persons = models.PositiveSmallIntegerField()
     cook_time_minutes = models.PositiveSmallIntegerField()
     instructions = models.CharField(max_length=4096)

@@ -24,12 +24,12 @@ class Add_Edit_Recipe(APIView):
             user = request.headers['Authorization']
             if (recipe_data['id'] is None):
                 recipe = Recipe(creator=request.user, name=recipe_data['name'], amount_persons=recipe_data['amount_persons'],
-                                cook_time_minutes=recipe_data['cook_time_minutes'],
+                                cook_time_minutes=recipe_data['cook_time_minutes'], image=recipe_data['img'],
                                 instructions=recipe_data['instructions'], is_deleted=False)
 
             else:
                 recipe = Recipe(id=recipe_data['id'], creator=request.user, name=recipe_data['name'], amount_persons=recipe_data['amount_persons'],
-                                cook_time_minutes=recipe_data['cook_time_minutes'],
+                                cook_time_minutes=recipe_data['cook_time_minutes'], image=recipe_data['img'],
                                 instructions=recipe_data['instructions'], is_deleted=False)
 
             recipe.save()
@@ -193,7 +193,8 @@ class Add_Edit_Tag_Category(APIView):
 class Users_Recipes(APIView):
     def get(self, request):
         try:
-            recipes = Recipe.objects.filter(creator=request.user)
+            recipes = Recipe.objects.filter(
+                creator=request.user, is_deleted=False)
             serializer = Recipe_Serializer_Short(recipes, many=True)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except RuntimeError as error:
@@ -203,7 +204,8 @@ class Users_Recipes(APIView):
 class Subscribed_Recipes(APIView):
     def get(self, request):
         try:
-            recipes = Recipe.objects.filter(subscribed_by=request.user)
+            recipes = Recipe.objects.filter(
+                subscribed_by=request.user, is_deleted=False)
             serializer = Recipe_Serializer_Short(recipes, many=True)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         except RuntimeError as error:

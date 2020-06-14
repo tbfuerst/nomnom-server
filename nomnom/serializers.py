@@ -24,7 +24,7 @@ class Tag_Serializer(serializers.ModelSerializer):
 class Recipe_Serializer_Short(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'image']
 
 
 class Ingredient_Serializer(serializers.ModelSerializer):
@@ -55,7 +55,7 @@ class Recipe_Serializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ['id', 'creator', 'name', 'amount_persons',
-                  'cook_time_minutes', 'ingredientsets', 'instructions', 'tags', 'subscribed_by']
+                  'cook_time_minutes', 'ingredientsets', 'instructions', 'tags', 'subscribed_by', 'image']
         depth = 2
 
 # doku: https://www.django-rest-framework.org/tutorial/1-serialization/#working-with-serializers

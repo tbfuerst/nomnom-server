@@ -1,2 +1,1 @@
-sudo docker-compose up
-docker-compose exec nomnom_api python3 /opt/app/manage.py collectstatic --noinput
+docker-compose up

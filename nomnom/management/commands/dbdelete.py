@@ -7,4 +7,4 @@ class Command(BaseCommand):
     help = 'Creates mock data and fills database with it.'
 
     def handle(self, *args, **options):
-        Ingredient.objects.all().delete
+        Ingredient.objects.all().delete()

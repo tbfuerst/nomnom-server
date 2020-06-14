@@ -23,7 +23,7 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=256)
 
     def ___str___(self):
         return self.name

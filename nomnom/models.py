@@ -31,15 +31,17 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     id = models.AutoField(primary_key=True)
-    creator = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    creator = models.ForeignKey(
+        'auth.User', on_delete=models.CASCADE, related_name="creator")
     name = models.CharField(max_length=64)
-    image = models.ImageField(upload_to='recipe-images/')
-    thumbnail = models.ImageField(upload_to='recipe-thumbs/')
+    image = models.TextField()
     amount_persons = models.PositiveSmallIntegerField()
     cook_time_minutes = models.PositiveSmallIntegerField()
     instructions = models.CharField(max_length=4096)
     is_deleted = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag)
+    subscribed_by = models.ManyToManyField(
+        'auth.User',  related_name="subscribers", blank=True)
 
     def ___str___(self):
         return self.name
@@ -51,8 +53,8 @@ class IngredientSet(models.Model):
         Recipe, related_name='ingredientsets', on_delete=models.CASCADE)
     ingredient = models.ForeignKey(
         Ingredient, related_name='ingredientName', on_delete=models.CASCADE)
-    amount = models.PositiveSmallIntegerField()
-    unit = models.CharField(max_length=32)
+    amount = models.PositiveSmallIntegerField(default=0)
+    unit = models.CharField(max_length=32, default='')
 
     def ___str___(self):
         return self.name

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from nomnom.models import Ingredient
+from nomnom.models import Ingredient, Recipe
 
 
 class Command(BaseCommand):

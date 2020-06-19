@@ -24,12 +24,12 @@ class Add_Edit_Recipe(APIView):
             user = request.headers['Authorization']
             if (recipe_data['id'] is None):
                 recipe = Recipe(creator=request.user, name=recipe_data['name'], amount_persons=recipe_data['amount_persons'],
-                                cook_time_minutes=recipe_data['cook_time_minutes'], image=recipe_data['img'],
+                                cook_time_minutes=recipe_data['cook_time_minutes'], image=recipe_data['img'], image_thumbnail=recipe_data['imgThumb'],
                                 instructions=recipe_data['instructions'], is_deleted=False)
 
             else:
                 recipe = Recipe(id=recipe_data['id'], creator=request.user, name=recipe_data['name'], amount_persons=recipe_data['amount_persons'],
-                                cook_time_minutes=recipe_data['cook_time_minutes'], image=recipe_data['img'],
+                                cook_time_minutes=recipe_data['cook_time_minutes'], image=recipe_data['img'], image_thumbnail=recipe_data['imgThumb'],
                                 instructions=recipe_data['instructions'], is_deleted=False)
 
             recipe.save()
@@ -88,7 +88,7 @@ class Ingredients_List(APIView):
 class Recipe_List(APIView):
     def get(self, request):
         ''' Returns all Recipe names '''
-        recipes = Recipe.objects.filter(is_deleted=False)
+        recipes = Recipe.objects.filter(is_deleted=False).values('name', 'id')
         serializer = Recipe_Serializer_Short(recipes, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 

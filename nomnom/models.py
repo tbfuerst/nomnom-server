@@ -35,6 +35,7 @@ class Recipe(models.Model):
         'auth.User', on_delete=models.CASCADE, related_name="creator")
     name = models.CharField(max_length=64)
     image = models.TextField()
+    image_thumbnail = models.TextField()
     amount_persons = models.PositiveSmallIntegerField()
     cook_time_minutes = models.PositiveSmallIntegerField()
     instructions = models.CharField(max_length=4096)

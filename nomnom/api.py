@@ -88,7 +88,7 @@ class Ingredients_List(APIView):
 class Recipe_List(APIView):
     def get(self, request):
         ''' Returns all Recipe names '''
-        recipes = Recipe.objects.filter(is_deleted=False).values('name', 'id')
+        recipes = Recipe.objects.filter(is_deleted=False)
         serializer = Recipe_Serializer_Short(recipes, many=True)
         return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
 

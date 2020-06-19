@@ -37,7 +37,7 @@ class RecipeSearcher:
 
     def search(self):
         found_recipe = Recipe.objects.filter(
-            id=self.searched_recipe_id, is_deleted=False).values('name', 'id', 'img_thumbnail')
+            id=self.searched_recipe_id, is_deleted=False)
         if found_recipe:  # read: if found recipe not empty
             if found_recipe[0].creator == self.requester:
                 is_owner = True
@@ -74,7 +74,7 @@ class TagSearcher:
         all_found_recipes_or = []
         for tags_id in found_tags:
             all_found_recipes_or += Recipe.objects.filter(
-                tags__id=tags_id, is_deleted=False).values('name', 'id', 'img_thumbnail')
+                tags__id=tags_id, is_deleted=False)
 
         counted_recipes_or = Counter(all_found_recipes_or)
         reduced_found_recipes_or = []
@@ -91,7 +91,7 @@ class TagSearcher:
         all_found_recipes_and = []
         for tagsId in found_tags:
             all_found_recipes_and += Recipe.objects.filter(
-                tags__id=tagsId, is_deleted=False).values('name', 'id', 'img_thumbnail')
+                tags__id=tagsId, is_deleted=False)
 
         c = Counter(all_found_recipes_and)
         reduced_found_recipes_and = []
@@ -152,10 +152,10 @@ class IngredientSearcher:
             for ingredient_set in ingredient_sets:
                 for subscriber in ingredient_set.recipe.subscribed_by.all():
                     if self.requester == subscriber:
-                        found_recipes.append(ingredient_set.recipe.values('name', 'id', 'img_thumbnail'))
+                        found_recipes.append(ingredient_set.recipe)
         else:
             for ingredient_set in ingredient_sets:
-                found_recipes.append(ingredient_set.recipe.values('name', 'id', 'img_thumbnail'))
+                found_recipes.append(ingredient_set.recipe)
 
         # reduce list to unique Recipes
         countedRecipes = Counter(found_recipes)
@@ -180,7 +180,7 @@ class IngredientSearcher:
         ingredient_sets_queries = []
         for ingredient_word in self.searched_ingredients:
             found_ingredient_set = IngredientSet.objects.filter(
-                ingredient__name=ingredient_word).values('name', 'id', 'img_thumbnail')  # field lookup
+                ingredient__name=ingredient_word)  # field lookup
             ingredient_sets_queries.append(found_ingredient_set)
 
         ##

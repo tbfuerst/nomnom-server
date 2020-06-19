@@ -24,7 +24,7 @@ class Tag_Serializer(serializers.ModelSerializer):
 class Recipe_Serializer_Short(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = ['id', 'name', 'image']
+        fields = ['id', 'name', 'image_thumbnail']
 
 
 class Ingredient_Serializer(serializers.ModelSerializer):

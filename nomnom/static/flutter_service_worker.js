@@ -8,14 +8,13 @@ const RESOURCES = {
 "assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
 "assets/NOTICES": "a6b14a9ad2bff294c26486483197fca7",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
-"assets/resources/images/examples/exampledish.jpg": "085821f41c7019339276d630d7e35245",
 "assets/resources/images/nomnomlogo_book_only.png": "526e74688191fd20e12188b580c3f583",
-"favicon.png": "82e8a9b53fdc21034b18afed93b9a2d8",
-"icons/Icon-192.png": "0f27ad6060664ebde892939e096ca43b",
-"icons/Icon-512.png": "38f60e9d7423ddb9bb49f84a2cb4ccfc",
+"favicon.png": "9c1d232334a53092f47dc772e92219e7",
+"icons/Icon-192.png": "b98f0add57755588536fae5612b1ff57",
+"icons/Icon-512.png": "ab1534b25206d7a69e676a73c4a9ca4a",
 "index.html": "6d8921de0c762677d32e5bc2ad03ffbf",
 "/": "6d8921de0c762677d32e5bc2ad03ffbf",
-"main.dart.js": "ff87fb9fe83e3976b1706f876b1f78f5",
+"main.dart.js": "42e1e2b861b4f58aa357bab19d40ed3c",
 "manifest.json": "3c1d68e8079940980a6c9dde2532f456"
 };
 

@@ -26,6 +26,11 @@ class Recipe_Serializer_Short(serializers.ModelSerializer):
         model = Recipe
         fields = ['id', 'name', 'image_thumbnail']
 
+class Recipe_Serializer_Short_No_Thumbs(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ['id', 'name',]
+
 
 class Ingredient_Serializer(serializers.ModelSerializer):
     class Meta:

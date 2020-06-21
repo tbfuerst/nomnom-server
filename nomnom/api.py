@@ -8,7 +8,7 @@ from rest_framework.authtoken import views
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import Tag_Category, Tag, Ingredient, Recipe, IngredientSet
-from .serializers import Tag_Category_Serializer, IngredientSet_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer_Short, Recipe_Serializer
+from .serializers import Tag_Category_Serializer, IngredientSet_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer_Short, Recipe_Serializer_Short_No_Thumbs, Recipe_Serializer
 
 # Authentication
 

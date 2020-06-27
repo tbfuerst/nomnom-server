@@ -3,19 +3,20 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "assets/AssetManifest.json": "148571108d559e2ab2503dc8831496d5",
-"assets/FontManifest.json": "01700ba55b08a6141f33e168c4a6c22f",
+  "main.dart.js": "cd51c4f560707d5fc25b036d43284383",
+"index.html": "eabe7e43059289244fd4d708e675f534",
+"/": "eabe7e43059289244fd4d708e675f534",
+"manifest.json": "b7ad33cba5328e95cebc3bd988617eb9",
+"assets/LICENSE": "630b3a020eddecd1a59b9edb71bd2bbb",
 "assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
-"assets/NOTICES": "a6b14a9ad2bff294c26486483197fca7",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
-"assets/resources/images/nomnomlogo_book_only.png": "526e74688191fd20e12188b580c3f583",
+"assets/NOTICES": "94e693da13bb641be8259124edd56f8a",
+"assets/AssetManifest.json": "148571108d559e2ab2503dc8831496d5",
+"assets/resources/images/nomnomlogo_book_only.png": "681037028ec5d531cee4b103ec520bd6",
+"assets/FontManifest.json": "01700ba55b08a6141f33e168c4a6c22f",
 "favicon.png": "9c1d232334a53092f47dc772e92219e7",
 "icons/Icon-192.png": "b98f0add57755588536fae5612b1ff57",
-"icons/Icon-512.png": "ab1534b25206d7a69e676a73c4a9ca4a",
-"index.html": "6d8921de0c762677d32e5bc2ad03ffbf",
-"/": "6d8921de0c762677d32e5bc2ad03ffbf",
-"main.dart.js": "42e1e2b861b4f58aa357bab19d40ed3c",
-"manifest.json": "3c1d68e8079940980a6c9dde2532f456"
+"icons/Icon-512.png": "ab1534b25206d7a69e676a73c4a9ca4a"
 };
 
 // The application shell files that are downloaded before a service worker can

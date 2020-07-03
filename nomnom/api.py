@@ -90,7 +90,7 @@ class Recipe_List(APIView):
         ''' Returns all Recipe names '''
         recipes = Recipe.objects.filter(is_deleted=False)
         serializer = Recipe_Serializer_Short_No_Thumbs(recipes, many=True)
-        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK) 
 
 
 class Edit_Subscription(APIView):

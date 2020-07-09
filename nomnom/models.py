@@ -33,7 +33,7 @@ class Recipe(models.Model):
     id = models.AutoField(primary_key=True)
     creator = models.ForeignKey(
         'auth.User', on_delete=models.CASCADE, related_name="creator")
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=256)
     image = models.TextField()
     image_thumbnail = models.TextField()
     amount_persons = models.PositiveSmallIntegerField()

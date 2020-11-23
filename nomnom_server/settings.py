@@ -31,7 +31,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 SECRET_KEY = 't%$a_)&+faej$utwx!_$nq85l-1y!$t-5utm@+=i7nc%7=ffw*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['nomnom.mordsgau.de']
 

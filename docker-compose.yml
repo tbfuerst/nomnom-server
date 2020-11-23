@@ -18,7 +18,6 @@ services:
     build: .
     ports:
       - "8100:8001"
-    mem_limit: 800m
     depends_on: 
       - db
 

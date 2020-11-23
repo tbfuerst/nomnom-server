@@ -50,5 +50,5 @@ urlpatterns = [
     path('search-by-ingredient', api.Ingredients_Search.as_view()),
     path('search-by-tag', api.Tag_Search.as_view()),
     path('search-for-recipe', api.Recipe_Search.as_view()),
-    path(r'^dowser/', include('django_dowser.urls')),
+    path('dowser/', include('django_dowser.urls')),
 ]

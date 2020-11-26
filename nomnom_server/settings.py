@@ -22,7 +22,7 @@ else:
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-STATIC_URL = ''
+STATIC_URL = '/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'nomnom/')
 
 # Quick-start development settings - unsuitable for production
@@ -156,6 +156,6 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = ''
+STATIC_URL = '/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'nomnom/')]

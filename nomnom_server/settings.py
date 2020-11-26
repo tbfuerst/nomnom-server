@@ -22,7 +22,7 @@ else:
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-STATIC_URL = '/static/'
+STATIC_URL = ''
 STATIC_ROOT = os.path.join(BASE_DIR, 'nomnom/static')
 
 # Quick-start development settings - unsuitable for production

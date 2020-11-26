@@ -15,7 +15,7 @@ COPY requirements.txt .
 
 RUN pip3 install -r requirements.txt
 
-COPY . /opt/app
+COPY . /opt/app/
 
 ENV DJANGO_ENV=prod
 ENV DOCKER_CONTAINER=1

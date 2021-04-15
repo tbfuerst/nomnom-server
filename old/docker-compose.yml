@@ -1,0 +1,25 @@
+version: "3"
+services:
+
+  db:
+    image: postgres
+    restart: always
+    expose: 
+      - 5435
+    environment: 
+      POSTGRES_USER: postgres
+      PGUSER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes: 
+      - pg_data:/var/lib/postgresql/data
+
+
+  nomnom_api:
+    build: .
+    ports:
+      - "8100:8001"
+    depends_on: 
+      - db
+
+volumes:
+  pg_data:

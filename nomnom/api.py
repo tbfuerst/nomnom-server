@@ -14,6 +14,15 @@ from .serializers import Tag_Category_Serializer, IngredientSet_Serializer, Ingr
 
 # Response Libraries
 
+class Latest_Recipes(APIView):
+    def get(self, request):
+            try:
+                print(request.data)
+                response="ok"
+                return JsonResponse(response, status=status.HTTP_200_OK)
+
+            except RuntimeError as error:
+                return HttpResponse(error, status=status.HTTP_400_BAD_REQUEST)
 
 class Add_Edit_Recipe(APIView):
     def post(self, request):

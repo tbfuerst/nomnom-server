@@ -41,6 +41,7 @@ urlpatterns = [
     path('add-edit-tag', api.Add_Edit_Tag.as_view()),
     path('add-edit-tag-category', api.Add_Edit_Tag_Category.as_view()),
     path('get-all-ingredients', api.Ingredients_List.as_view()),
+    path('get-latest-recipes', api.Latest_Recipes.as_view()),
     path('get-my-recipes', api.Users_Recipes.as_view()),
     path('get-my-subscribed-recipes', api.Subscribed_Recipes.as_view()),
     path('get-full-tag-info', api.Tag_Tag_Category_List.as_view()),

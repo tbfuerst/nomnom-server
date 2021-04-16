@@ -1,4 +1,0 @@
-#!/bin/sh
-
-docker-compose exec nomnom_api python3 /opt/app/manage.py collectstatic --noinput
-

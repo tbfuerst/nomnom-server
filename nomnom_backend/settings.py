@@ -12,7 +12,23 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
-from config import *
+
+if os.environ.get('GITHUB_WORKFLOW'):
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    DEBUG = True
+    ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'),]
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'nomnom_db',
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': '127.0.0.1',
+            'PORT': 5432,
+        }
+}
+else
+    from config import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

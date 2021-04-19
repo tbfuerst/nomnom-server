@@ -27,7 +27,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
             'PORT': 5432,
         }
 }
-else
+else:
     from config import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

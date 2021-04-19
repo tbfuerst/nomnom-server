@@ -29,3 +29,6 @@ venv.bak/
 
 # Local Config
 config.py
+
+# dev database
+database/

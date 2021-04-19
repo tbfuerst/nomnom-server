@@ -15,7 +15,7 @@ services:
 
 
   nomnom_backend:
-    build: .
+    image: tluderer/nomnomserver:latest
     ports:
       - "8100:8100"
     depends_on: 

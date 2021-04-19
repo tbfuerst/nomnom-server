@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 
 if os.environ.get('GITHUB_WORKFLOW'):
+    print("ghActions Workflow :)")
+    print(os.environ.get('SECRET_KEY'))
     SECRET_KEY = os.environ.get('SECRET_KEY')
     DEBUG = True
     ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'),]
@@ -29,6 +31,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
 }
 else:
     from config import *
+    print("not ghActions Workflow :)")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -86,18 +89,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'nomnom_backend.wsgi.application'
-
-if os.environ.get('GITHUB_WORKFLOW'):
-    DATABASES = {
-        'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'github_actions',
-           'USER': 'postgres',
-           'PASSWORD': 'postgres',
-           'HOST': '127.0.0.1',
-           'PORT': '5432',
-        }
-    }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('oauth2_provider.contrib.rest_framework.OAuth2Authentication',),

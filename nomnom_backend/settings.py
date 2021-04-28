@@ -27,10 +27,14 @@ if os.environ.get('GITHUB_WORKFLOW'):
             'HOST': '127.0.0.1',
             'PORT': 5432,
         }
-}
+    }
+elif os.getenv('DOCKER_CONTAINER') == 1:
+    print('docker')
+    from config.config import *
 else:
     from config.config import *
     print("not ghActions Workflow :)")
+    print(os.environ.get('POSTGRES_HOST'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

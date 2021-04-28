@@ -4,18 +4,20 @@ services:
   db:
     image: postgres
     restart: always
-    expose: 
-      - 5432
     environment: 
       POSTGRES_USER: postgres
       PGUSER: postgres
       POSTGRES_PASSWORD: admin
     volumes: 
-      - ./database:/var/lib/postgresql/12/main/
+      - ./database:/var/lib/postgresql/data/
 
 
   nomnom_backend:
-    image: tluderer/nomnomserver:latest-arm64
+    #image: tluderer/nomnomserver:latest-arm64
+    environment:
+      POSTGRES_HOST: db
+      DOCKER_CONTAINER: 1
+    build: .
     restart: always
     ports:
       - "8100:8100"
@@ -24,6 +26,6 @@ services:
     volumes: 
       - ./nomnom-config:/opt/app/config
 
-volumes:
-  database:
-  nomnom-config:
+# volumes:
+#   database:
+#   nomnom-config:

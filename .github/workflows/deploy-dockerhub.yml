@@ -89,11 +89,11 @@ jobs:
         tags: tluderer/nomnomserver:latest-amd64
 
     - name: Build and push ARM64
-       uses: ilteoood/docker_buildx@master
-       with:
-         publish: true
-         platform: linux/arm64
-         imageName: nomnomserver
-         tag: latest-arm64
-         dockerUser: ${{ secrets.DOCKER_USERNAME }}
-         dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
+      uses: ilteoood/docker_buildx@master
+      with:
+        publish: true
+        platform: linux/arm64
+        imageName: nomnomserver
+        tag: latest-arm64
+        dockerUser: ${{ secrets.DOCKER_USERNAME }}
+        dockerPassword: ${{ secrets.DOCKER_PASSWORD }}

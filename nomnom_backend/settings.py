@@ -15,7 +15,6 @@ from pathlib import Path
 
 if os.environ.get('GITHUB_WORKFLOW'):
     print("ghActions Workflow :)")
-    print(os.environ.get('SECRET_KEY'))
     SECRET_KEY = os.environ.get('SECRET_KEY')
     DEBUG = True
     ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'),]

@@ -11,17 +11,19 @@ services:
       PGUSER: postgres
       POSTGRES_PASSWORD: admin
     volumes: 
-      - ./database:/var/lib/postgresql/data
+      - ./database:/var/lib/postgresql/12/main/
 
 
   nomnom_backend:
     image: tluderer/nomnomserver:latest-arm64
+    restart: always
     ports:
       - "8100:8100"
     depends_on: 
       - db
     volumes: 
       - ./nomnom-config:/opt/app/config
-#volumes:
-#  pg_data:
-#
+
+volumes:
+  database:
+  nomnom-config:

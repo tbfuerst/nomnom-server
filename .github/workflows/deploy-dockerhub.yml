@@ -86,4 +86,13 @@ jobs:
       with:
         context: .
         push: true
-        tags: tluderer/nomnomserver:latest
+        tags: tluderer/nomnomserver:latest-amd64
+
+    - name: Run Buildx (push image)      
+      if: success()      
+      run: |        
+        docker buildx build \        
+        --platform linux/arm/v7 \             
+        --tag tluderer/nomnomserver:latest-armv7 \        
+        --file ./Dockerfile \        
+        --output type=image,push=true .

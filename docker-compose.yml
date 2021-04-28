@@ -15,10 +15,13 @@ services:
 
 
   nomnom_backend:
-    image: tluderer/nomnomserver:latest
+    image: tluderer/nomnomserver:latest-arm64
     ports:
       - "8100:8100"
     depends_on: 
       - db
-volumes:
-  pg_data:
+    volumes: 
+      - ./nomnom-config:/opt/app/config
+#volumes:
+#  pg_data:
+#

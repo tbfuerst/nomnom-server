@@ -29,7 +29,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
         }
 }
 else:
-    from config import *
+    from config.config import *
     print("not ghActions Workflow :)")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

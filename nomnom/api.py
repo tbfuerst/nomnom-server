@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .models import Tag_Category, Tag, Ingredient, Recipe, IngredientSet
 from .serializers import Tag_Category_Serializer, IngredientSet_Serializer, Ingredient_Serializer, Tag_Serializer, Recipe_Serializer_Short, Recipe_Serializer_Short_No_Thumbs, Recipe_Serializer
+import json
 
 # Authentication
 
@@ -228,16 +229,17 @@ class Add_Tag(APIView):
 
 
 class Ingredients_Search(APIView):
-
+    
     def post(self, request):
         """Returns a JSON of Recipes which contain the ingredients,
         provided by the request
 
         @param: list<String> request.data
         """
+        parsedIngredients = json.loads(request.data['ingredients'])
         try:
             searcher = IngredientSearcher(
-                request.data['ingredients'], request.data['search-type'], request.data['search-range'], request.user)
+                parsedIngredients, request.data['search-type'], request.data['search-range'], request.user)
             if (request.data['search-type'] == "AND"):
                 recipes = searcher.and_search()
             else:

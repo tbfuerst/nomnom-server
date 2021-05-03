@@ -124,12 +124,11 @@ class IngredientSearcher:
         self.operator = search_type
         self.search_range = search_range
         self.requester = requester
-
-    # TODO: Filter for subscribed type
+        
 
     def or_search(self):
-        intro = "Searching: \"" + \
-            ', '.join(self.searched_ingredients) + \
+        intro = "Searching Recipe ID(s): \"" + \
+            ", ".join(map(str, self.searched_ingredients)) + \
             "\" with operator: " + self.operator + \
             "\" with range: " + self.search_range
 
@@ -138,10 +137,10 @@ class IngredientSearcher:
         ingredient_sets = []
 
         print(intro)
-        for ingredient_word in self.searched_ingredients:
+        for ingredient_id in self.searched_ingredients:
 
             found_ingredient_set = IngredientSet.objects.filter(
-                ingredient__name=ingredient_word)  # field lookup
+                ingredient__id=ingredient_id)  # field lookup
             ingredient_sets += found_ingredient_set
 
         # extract and save the found recipes
@@ -166,8 +165,8 @@ class IngredientSearcher:
         return uniqueRecipeList
 
     def and_search(self):
-        intro = "Searching: \"" + \
-            ', '.join(self.searched_ingredients) + \
+        intro = "Searching Recipe ID(s): \"" + \
+            ", ".join(map(str, self.searched_ingredients)) + \
             "\" with operator: " + self.operator + \
             "\" with range: " + self.search_range
 
@@ -178,9 +177,9 @@ class IngredientSearcher:
         print(intro)
 
         ingredient_sets_queries = []
-        for ingredient_word in self.searched_ingredients:
+        for ingredient_id in self.searched_ingredients:
             found_ingredient_set = IngredientSet.objects.filter(
-                ingredient__name=ingredient_word)  # field lookup
+                ingredient__id=ingredient_id)  # field lookup
             ingredient_sets_queries.append(found_ingredient_set)
 
         ##

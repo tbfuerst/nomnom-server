@@ -26,7 +26,7 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=256)
 
     def ___str___(self):
-        return self.name
+        return self.id
 
 
 class Recipe(models.Model):
@@ -53,7 +53,7 @@ class IngredientSet(models.Model):
     recipe = models.ForeignKey(
         Recipe, related_name='ingredientsets', on_delete=models.CASCADE)
     ingredient = models.ForeignKey(
-        Ingredient, related_name='ingredientName', on_delete=models.CASCADE)
+        Ingredient, related_name='ingredientID', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=7, decimal_places=2)
     unit = models.CharField(max_length=32, default='')
 

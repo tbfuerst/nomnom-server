@@ -13,11 +13,11 @@ services:
 
 
   nomnom_backend:
-    #image: tluderer/nomnomserver:latest-arm64
+    image: tluderer/nomnomserver:latest-arm64
     environment:
       POSTGRES_HOST: db
       DOCKER_CONTAINER: 1
-    build: .
+    # build: .
     restart: always
     ports:
       - "8100:8100"
